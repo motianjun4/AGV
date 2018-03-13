@@ -319,7 +319,6 @@ void USER_UART_IDLECallback(UART_HandleTypeDef *huart)
 			strcpy(positionData, rxBuffer);
 			
 		}
-		
 		memset(rxBuffer, 0, 256);
 		HAL_UART_Receive_DMA(&huart2,rxBuffer,256);
 		
