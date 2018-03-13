@@ -71,8 +71,10 @@ uint8_t run=0,run10=0;
 uint8_t rxBuffer[256]="";
 uint8_t positionData[256]="";
 
-float pos_x,pos_y,tar_x,tar_y=0;
 
+float pos_x,pos_y,tar_x,tar_y=0;
+float direction = 0;
+float target_direction = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -205,6 +207,10 @@ int main(void)
 					angle_offset[dimension] = angle[dimension];
 				}
 			}
+			sscanf(positionData,"A%f,%f,%f,%fF",&pos_x,&pos_y,&tar_x,&tar_y);
+			direction = (angle[0]-angle_offset[0])/180.0*3.14159;
+			
+			target_direction = atan((tar_y-pos_y)/(tar_x-pos_x));
 			
 			
 			
@@ -222,12 +228,14 @@ int main(void)
 		//HAL_Delay(100);
 		if(run10){
 			run10=0;
-			//sprintf(str,"C%.4fF",(angle[0]-angle_offset[0])/180.0*3.14159);
-			sprintf(str,"Yaw: %.2f  Pitch: %.2f Roll: %.2f, PosX: %.2f,PosY: %.2f,TarX: %.2f,TarY: %.2f\n",angle[0]-angle_offset[0],angle[1]-angle_offset[1],angle[2]-angle_offset[2],pos_x,pos_y,tar_x,tar_y);
+			//sprintf(str,"C%.4fF\n",direction);
+			sprintf(str,"Direction:%.2f,TargetDirection:%.2f\n",direction,target_direction);
+			//sprintf(str,"Yaw: %.2f  Pitch: %.2f Roll: %.2f, PosX: %.2f,PosY: %.2f,TarX: %.2f,TarY: %.2f\n",angle[0]-angle_offset[0],angle[1]-angle_offset[1],angle[2]-angle_offset[2],pos_x,pos_y,tar_x,tar_y);
+			
 			printf_DMA(str);
 			
 		}
-		sscanf(positionData,"A%f,%f,%f,%fF",&pos_x,&pos_y,&tar_x,&tar_y);
+		
 		update_DMP();
 		
 	  
