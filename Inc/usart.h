@@ -47,7 +47,6 @@
 /* USER CODE END Includes */
 
 extern UART_HandleTypeDef huart2;
-extern DMA_HandleTypeDef hdma_usart2_rx;
 
 /* USER CODE BEGIN Private defines */
 int fputc(int ch, FILE *f);

@@ -290,9 +290,6 @@ HAL_StatusTypeDef HAL_UART_Init(UART_HandleTypeDef *huart)
   /* Enable the peripheral */
   __HAL_UART_ENABLE(huart);
   
-  /* Enable the IDLE Interrupt*/
-  __HAL_UART_ENABLE_IT(huart, UART_IT_IDLE);
-  
   /* Initialize the UART state */
   huart->ErrorCode = HAL_UART_ERROR_NONE;
   huart->gState= HAL_UART_STATE_READY;
