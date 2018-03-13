@@ -33,20 +33,52 @@ compiling main.c...
         HAL_UART_Transmit_DMA(&huart2, tmpstr, strlen(tmpstr));
 ../Src/main.c(169): warning:  #167-D: argument of type "uint8_t *" is incompatible with parameter of type "const char *restrict"
         sscanf(positionData,"A%f,%f,%f,%fF",&pos_x,&pos_y,&tar_x,&tar_y);
-../Src/main.c(277): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+../Src/main.c(192): warning:  #188-D: enumerated type mixed with another type
+                HAL_GPIO_WritePin(MOT1_A_GPIO_Port,MOT1_A_Pin,0);
+../Src/main.c(193): warning:  #188-D: enumerated type mixed with another type
+                HAL_GPIO_WritePin(MOT1_B_GPIO_Port,MOT1_B_Pin,0);
+../Src/main.c(194): warning:  #188-D: enumerated type mixed with another type
+                HAL_GPIO_WritePin(MOT2_A_GPIO_Port,MOT2_A_Pin,0);
+../Src/main.c(195): warning:  #188-D: enumerated type mixed with another type
+                HAL_GPIO_WritePin(MOT2_B_GPIO_Port,MOT2_B_Pin,0);
+../Src/main.c(196): warning:  #188-D: enumerated type mixed with another type
+                HAL_GPIO_WritePin(MOT3_A_GPIO_Port,MOT3_A_Pin,0);
+../Src/main.c(197): warning:  #188-D: enumerated type mixed with another type
+                HAL_GPIO_WritePin(MOT3_B_GPIO_Port,MOT3_B_Pin,0);
+../Src/main.c(198): warning:  #188-D: enumerated type mixed with another type
+                HAL_GPIO_WritePin(MOT4_A_GPIO_Port,MOT4_A_Pin,0);
+../Src/main.c(199): warning:  #188-D: enumerated type mixed with another type
+                HAL_GPIO_WritePin(MOT4_B_GPIO_Port,MOT4_B_Pin,0);
+../Src/main.c(218): warning:  #188-D: enumerated type mixed with another type
+                        HAL_GPIO_WritePin(MOT1_A_GPIO_Port,MOT1_A_Pin,1);
+../Src/main.c(219): warning:  #188-D: enumerated type mixed with another type
+                        HAL_GPIO_WritePin(MOT1_B_GPIO_Port,MOT1_B_Pin,0);
+../Src/main.c(220): warning:  #188-D: enumerated type mixed with another type
+                        HAL_GPIO_WritePin(MOT2_A_GPIO_Port,MOT2_A_Pin,1);
+../Src/main.c(221): warning:  #188-D: enumerated type mixed with another type
+                        HAL_GPIO_WritePin(MOT2_B_GPIO_Port,MOT2_B_Pin,0);
+../Src/main.c(222): warning:  #188-D: enumerated type mixed with another type
+                        HAL_GPIO_WritePin(MOT3_A_GPIO_Port,MOT3_A_Pin,1);
+../Src/main.c(223): warning:  #188-D: enumerated type mixed with another type
+                        HAL_GPIO_WritePin(MOT3_B_GPIO_Port,MOT3_B_Pin,0);
+../Src/main.c(224): warning:  #188-D: enumerated type mixed with another type
+                        HAL_GPIO_WritePin(MOT4_A_GPIO_Port,MOT4_A_Pin,1);
+../Src/main.c(225): warning:  #188-D: enumerated type mixed with another type
+                        HAL_GPIO_WritePin(MOT4_B_GPIO_Port,MOT4_B_Pin,0);
+../Src/main.c(321): warning:  #1035-D: single-precision operand implicitly converted to double-precision
                         direction = (angle[0]-angle_offset[0])/180.0*3.14159;
-../Src/main.c(386): warning:  #167-D: argument of type "uint8_t *" is incompatible with parameter of type "const char *"
+../Src/main.c(432): warning:  #167-D: argument of type "uint8_t *" is incompatible with parameter of type "const char *"
                 if(strchr(rxBuffer,'F')!=NULL && strchr(rxBuffer,'A')!=NULL)
-../Src/main.c(386): warning:  #167-D: argument of type "uint8_t *" is incompatible with parameter of type "const char *"
+../Src/main.c(432): warning:  #167-D: argument of type "uint8_t *" is incompatible with parameter of type "const char *"
                 if(strchr(rxBuffer,'F')!=NULL && strchr(rxBuffer,'A')!=NULL)
-../Src/main.c(388): warning:  #167-D: argument of type "uint8_t *" is incompatible with parameter of type "char *restrict"
+../Src/main.c(434): warning:  #167-D: argument of type "uint8_t *" is incompatible with parameter of type "char *restrict"
                         strcpy(positionData, rxBuffer);
-../Src/main.c(388): warning:  #167-D: argument of type "uint8_t *" is incompatible with parameter of type "const char *restrict"
+../Src/main.c(434): warning:  #167-D: argument of type "uint8_t *" is incompatible with parameter of type "const char *restrict"
                         strcpy(positionData, rxBuffer);
-../Src/main.c: 8 warnings, 0 errors
+../Src/main.c: 24 warnings, 0 errors
 linking...
-Program Size: Code=34442 RO-data=3154 RW-data=64 ZI-data=2448  
-"AGV\AGV.axf" - 0 Error(s), 8 Warning(s).
+Program Size: Code=34758 RO-data=3158 RW-data=64 ZI-data=2448  
+"AGV\AGV.axf" - 0 Error(s), 24 Warning(s).
 
 <h2>Software Packages used:</h2>
 

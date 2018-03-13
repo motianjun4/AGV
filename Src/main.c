@@ -322,8 +322,8 @@ int main(void)
 			target_direction = get_direction(pos_x,pos_y,tar_x,tar_y);
 			turn_direction = get_turn_direction(target_direction,direction);
 			go_forward = get_go_forward_action(distance);
-			go_forward = 1;
-			turn_direction = 0;
+			//go_forward = 1;
+			//turn_direction = 0;
 			car_control(go_forward, turn_direction);
 			
 			

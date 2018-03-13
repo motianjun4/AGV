@@ -76,7 +76,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
   if(uartHandle->Instance==USART2)
   {
   /* USER CODE BEGIN USART2_MspInit 0 */
-
+	
   /* USER CODE END USART2_MspInit 0 */
     /* Peripheral clock enable */
     __HAL_RCC_USART2_CLK_ENABLE();
@@ -138,7 +138,11 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
     HAL_NVIC_SetPriority(USART2_IRQn, 0, 0);
     HAL_NVIC_EnableIRQ(USART2_IRQn);
   /* USER CODE BEGIN USART2_MspInit 1 */
-
+	
+	/* Enable the IDLE Interrupt*/
+  __HAL_UART_ENABLE_IT(uartHandle, UART_IT_IDLE);
+	
+	
   /* USER CODE END USART2_MspInit 1 */
   }
 }
