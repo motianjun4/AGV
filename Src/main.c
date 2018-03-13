@@ -144,11 +144,11 @@ int get_turn_direction(float target_direction,float direction)
 	}
 	int idx=0;
 	idx = fabs_min_index(delta_direction_array, 5);
-	if(delta_direction_array[idx]>0.35f)
+	if(delta_direction_array[idx]>0.25f)
 	{
 		turn_direction = 2;
 	}
-	else if(delta_direction_array[idx] <-0.35f)
+	else if(delta_direction_array[idx] <-0.25f)
 	{
 		turn_direction = 1;
 	}
@@ -185,6 +185,47 @@ uint8_t get_go_forward_action(float distance)
 	}
 }
 
+void car_control(uint8_t forward, uint8_t turn)
+{
+	if(forward==0)
+	{
+		HAL_GPIO_WritePin(MOT1_A_GPIO_Port,MOT1_A_Pin,0);
+		HAL_GPIO_WritePin(MOT1_B_GPIO_Port,MOT1_B_Pin,0);
+		HAL_GPIO_WritePin(MOT2_A_GPIO_Port,MOT2_A_Pin,0);
+		HAL_GPIO_WritePin(MOT2_B_GPIO_Port,MOT2_B_Pin,0);
+		HAL_GPIO_WritePin(MOT3_A_GPIO_Port,MOT3_A_Pin,0);
+		HAL_GPIO_WritePin(MOT3_B_GPIO_Port,MOT3_B_Pin,0);
+		HAL_GPIO_WritePin(MOT4_A_GPIO_Port,MOT4_A_Pin,0);
+		HAL_GPIO_WritePin(MOT4_B_GPIO_Port,MOT4_B_Pin,0);
+		HAL_TIM_PWM_Stop(&htim2, TIM_CHANNEL_2);//PWM1
+		HAL_TIM_PWM_Stop(&htim3, TIM_CHANNEL_2);//PWM2
+		HAL_TIM_PWM_Stop(&htim3, TIM_CHANNEL_1);//PWM3
+		HAL_TIM_PWM_Stop(&htim2, TIM_CHANNEL_3);//PWM4
+		
+	}
+	else if(forward == 1)
+	{
+		TIM2->CCR2 = 50;//PWM1
+		TIM3->CCR2 = 50;//PWM2
+		TIM3->CCR1 = 50;//PWM3
+		TIM2->CCR3 = 50;//PWM4
+		HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);//PWM1
+		HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);//PWM2
+		HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);//PWM3
+		HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_3);//PWM4
+		
+		if(turn == 0){
+			HAL_GPIO_WritePin(MOT1_A_GPIO_Port,MOT1_A_Pin,1);
+			HAL_GPIO_WritePin(MOT1_B_GPIO_Port,MOT1_B_Pin,0);
+			HAL_GPIO_WritePin(MOT2_A_GPIO_Port,MOT2_A_Pin,1);
+			HAL_GPIO_WritePin(MOT2_B_GPIO_Port,MOT2_B_Pin,0);
+			HAL_GPIO_WritePin(MOT3_A_GPIO_Port,MOT3_A_Pin,1);
+			HAL_GPIO_WritePin(MOT3_B_GPIO_Port,MOT3_B_Pin,0);
+			HAL_GPIO_WritePin(MOT4_A_GPIO_Port,MOT4_A_Pin,1);
+			HAL_GPIO_WritePin(MOT4_B_GPIO_Port,MOT4_B_Pin,0);
+		}
+	}
+}
 
 
 /* USER CODE END 0 */
@@ -222,14 +263,17 @@ int main(void)
   /* USER CODE BEGIN 2 */
 	
 	
-	TIM2->CCR2 = 50;
-	TIM2->CCR3 = 50;
-	TIM3->CCR1 = 50;
-	TIM3->CCR2 = 50;
-	HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);
-	HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_3);
-	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
-	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);
+	TIM2->CCR2 = 50;//PWM1
+	TIM3->CCR2 = 50;//PWM2
+	TIM3->CCR1 = 50;//PWM3
+	TIM2->CCR3 = 50;//PWM4
+
+	HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);//PWM1
+	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);//PWM2
+	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);//PWM3
+	HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_3);//PWM4
+
+	
 	
 	
 	MPU6050(0xD0);
@@ -278,7 +322,9 @@ int main(void)
 			target_direction = get_direction(pos_x,pos_y,tar_x,tar_y);
 			turn_direction = get_turn_direction(target_direction,direction);
 			go_forward = get_go_forward_action(distance);
-			
+			go_forward = 1;
+			turn_direction = 0;
+			car_control(go_forward, turn_direction);
 			
 			
 			
