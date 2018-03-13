@@ -75,6 +75,10 @@ uint8_t positionData[256]="";
 float pos_x,pos_y,tar_x,tar_y=0;
 float direction = 0;
 float target_direction = 0;
+uint8_t turn_direction = 0; //1-left 2-right
+uint8_t go_forward = 0; //1-foreward 2-backward
+float distance = 0;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -119,7 +123,67 @@ void update_DMP(void)
 			
 }
 
+int fabs_min_index(float a[],int size)
+{
+	int i,min=0;
+	for(i=1;i<size;i++)
+		if(fabs(a[i])<fabs(a[min]))
+			min=i;
+	return min;
+}
 
+int get_turn_direction(float target_direction,float direction)
+{
+	uint8_t turn_direction=0;
+	target_direction += 3.1415926f*4.0f;
+	float delta_direction_array[5];
+	for(int index=0;index<5;index++)
+	{
+		delta_direction_array[index] = target_direction - direction;
+		target_direction -= 3.1415926f*2.0f;
+	}
+	int idx=0;
+	idx = fabs_min_index(delta_direction_array, 5);
+	if(delta_direction_array[idx]>0.35f)
+	{
+		turn_direction = 2;
+	}
+	else if(delta_direction_array[idx] <-0.35f)
+	{
+		turn_direction = 1;
+	}
+	else
+	{
+		turn_direction = 0;
+	}
+	return turn_direction;
+}
+
+float get_direction(float pos_x,float pos_y,float tar_x,float tar_y)
+{
+	return atan((tar_y-pos_y)/(tar_x-pos_x));
+}
+
+void convert_position_data(uint8_t* positionData)
+{
+	sscanf(positionData,"A%f,%f,%f,%fF",&pos_x,&pos_y,&tar_x,&tar_y);
+}
+float get_target_distance(float pos_x,float pos_y,float tar_x,float tar_y)
+{
+	return sqrt(pow(tar_x-pos_x,2)+pow(tar_y-pos_y,2));
+}
+
+uint8_t get_go_forward_action(float distance)
+{
+	if(distance>10)
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
 
 
 
@@ -207,18 +271,14 @@ int main(void)
 					angle_offset[dimension] = angle[dimension];
 				}
 			}
-			sscanf(positionData,"A%f,%f,%f,%fF",&pos_x,&pos_y,&tar_x,&tar_y);
+			
+			convert_position_data(positionData);	
+			distance = get_target_distance(pos_x,pos_y,tar_x,tar_y);
 			direction = (angle[0]-angle_offset[0])/180.0*3.14159;
+			target_direction = get_direction(pos_x,pos_y,tar_x,tar_y);
+			turn_direction = get_turn_direction(target_direction,direction);
+			go_forward = get_go_forward_action(distance);
 			
-			target_direction = atan((tar_y-pos_y)/(tar_x-pos_x));
-			
-			
-			
-			//sprintf(str,"CNT:%d\n",tick_tock);
-
-			//printf_DMA(str);
-			//HAL_Delay(10);
-			HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
 			
 			
 			
@@ -229,9 +289,10 @@ int main(void)
 		if(run10){
 			run10=0;
 			//sprintf(str,"C%.4fF\n",direction);
-			sprintf(str,"Direction:%.2f,TargetDirection:%.2f\n",direction,target_direction);
+			sprintf(str,"Direction:%.2f,TargetDirection:%.2f,TurnDirection:%d,Distance:%.2f,GoForward:%d\r\n",
+						direction,target_direction,turn_direction,distance,go_forward);
 			//sprintf(str,"Yaw: %.2f  Pitch: %.2f Roll: %.2f, PosX: %.2f,PosY: %.2f,TarX: %.2f,TarY: %.2f\n",angle[0]-angle_offset[0],angle[1]-angle_offset[1],angle[2]-angle_offset[2],pos_x,pos_y,tar_x,tar_y);
-			
+			HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
 			printf_DMA(str);
 			
 		}
@@ -329,7 +390,6 @@ void USER_UART_IDLECallback(UART_HandleTypeDef *huart)
 		}
 		memset(rxBuffer, 0, 256);
 		HAL_UART_Receive_DMA(&huart2,rxBuffer,256);
-		
 		
 	}
 }
